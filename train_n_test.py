@@ -1,13 +1,16 @@
 import tensorflow as tf
 from fashion_input import prepare_df, load_data_numpy
-from simple_resnet import ResNet50
-import os
+from simple_resnet import ResNet50V2
 import numpy as np
 from hyper_parameters import get_arguments
-# from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ReduceLROnPlateau, ModelCheckpoint
 import os
 import datetime
+from transfer_learning import transfer_learning_model
+from ensemble_learning import create_ensemble
+from grad_cam import grad_cam
+import pickle
+
 
 args = get_arguments()
 
@@ -34,9 +37,13 @@ def train():
     train_dataset = get_dataset(train_df, args.batch_size)
     val_dataset = get_dataset(vali_df, args.batch_size)
 
-    model = ResNet50(input_shape=(64, 64, 3), classes=6)
+    model = ResNet50V2(input_shape=(64, 64, 3), classes=6)
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+    num_models = 3  # Adjust as needed
+    ensemble_models = create_ensemble(num_models, input_shape=(
+        64, 64, 3), num_classes=6, train_dataset=train_dataset)
 
     # model.fit(train_dataset, epochs=args.epochs, validation_data=val_dataset)
     log_dir = os.path.join(
@@ -51,7 +58,7 @@ def train():
         monitor='val_loss',  # Monitor validation loss
         min_delta=0.001,         # Adjust minimum change threshold
         patience=7,              # Increase patience
-        verbose=1, 
+        verbose=1,
         mode='min'               # Monitor for loss improvement
     )
 
@@ -59,7 +66,7 @@ def train():
         monitor='val_accuracy',  # Monitor validation accuracy
         min_delta=0.001,         # Adjust minimum change threshold
         patience=7,              # Increase patience
-        verbose=1, 
+        verbose=1,
         mode='max'               # Monitor for accuracy improvement
     )
 
@@ -71,7 +78,8 @@ def train():
         monitor='val_loss', factor=0.1, patience=5, min_lr=0.0001
     )
 
-    model_checkpoint = ModelCheckpoint(filepath='best_model.keras', monitor='val_loss', save_best_only=True)
+    model_checkpoint = ModelCheckpoint(
+        filepath='best_model.keras', monitor='val_loss', save_best_only=True)
 
     callbacks_list = [
         tensorboard_callback,
@@ -81,20 +89,25 @@ def train():
         model_checkpoint
     ]
 
-    # # Include the desired Early Stopping in the callbacks list. Uncomment the one you prefer.
-    # callbacks_list = [
-    #     tensorboard_callback,
-    #     # early_stopping_loss,  # Uncomment to enable early stopping based on loss
-    #     early_stopping_acc    # Uncomment to enable early stopping based on accuracy
-    # ]
-
     model.fit(train_dataset, epochs=args.epochs,
               validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
 
-    # # Save the model
-    # if not os.path.exists(TRAIN_DIR):
-    #     os.makedirs(TRAIN_DIR)
-    # model.save(os.path.join(TRAIN_DIR, 'final_model.h5'))
+    # for model in ensemble_models:
+    #     model.fit(train_dataset, epochs=args.epochs,
+    #               validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
+
+    # Evaluate the ensemble on the validation set
+    # ensemble_accuracies = []
+    # for model in ensemble_models:
+    #     _, accuracy = model.evaluate(val_dataset, verbose=0)
+    #     ensemble_accuracies.append(accuracy)
+
+    # Calculate the ensemble accuracy as the mean of individual model accuracies
+    # ensemble_accuracy = sum(ensemble_accuracies) / len(ensemble_accuracies)
+    # print("Ensemble Accuracy:", ensemble_accuracy)
+
+    # with open('ensemble_models.pkl', 'wb') as f:
+    #     pickle.dump(ensemble_models, f)
 
     # Save the model
     TRAIN_DIR = 'logs_' + args.version + '/'
@@ -105,3 +118,27 @@ def train():
 
 if __name__ == "__main__":
     train()
+
+# if __name__ == "__main__":
+#     # Load and preprocess the dataset
+#     train_dataset = get_dataset(train_df, args.batch_size)
+#     val_dataset = get_dataset(vali_df, args.batch_size)
+
+#     # Create an ensemble of models
+#     num_models = 3  # Adjust as needed
+#     ensemble_models = create_ensemble(num_models, input_shape=(64, 64, 3), num_classes=6, train_dataset=train_dataset)
+
+#     # Train the ensemble models
+#     for model in ensemble_models:
+#         model.fit(train_dataset, epochs=args.epochs,
+#                   validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
+
+#     # Evaluate the ensemble on the validation set
+#     ensemble_accuracies = []
+#     for model in ensemble_models:
+#         _, accuracy = model.evaluate(val_dataset, verbose=0)
+#         ensemble_accuracies.append(accuracy)
+
+#     # Calculate the ensemble accuracy as the mean of individual model accuracies
+#     ensemble_accuracy = sum(ensemble_accuracies) / len(ensemble_accuracies)
+#     print("Ensemble Accuracy:", ensemble_accuracy)
