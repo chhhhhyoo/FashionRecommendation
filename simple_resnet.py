@@ -61,3 +61,33 @@ def ResNet50(input_shape=(64, 64, 3), classes=6):
     # Create model.
     model = tf.keras.Model(inputs, x, name='resnet50')
     return model
+
+
+def ResNet50V2(input_shape=(64, 64, 3), classes=6):
+    """Builds a modified ResNet50 with additional layers."""
+    inputs = tf.keras.Input(shape=input_shape)
+    x = tf.keras.layers.Conv2D(
+        64, 7, strides=2, padding='same', name='conv1_conv')(inputs)
+    x = tf.keras.layers.BatchNormalization(axis=3, name='conv1_bn')(x)
+    x = tf.keras.layers.Activation('relu', name='conv1_relu')(x)
+    x = tf.keras.layers.MaxPooling2D(
+        3, strides=2, padding='same', name='pool1_pool')(x)
+
+    # Additional layers
+    x = ResNetBlock(x, 64, name='conv2_block1')
+    x = ResNetBlock(x, 64, conv_shortcut=False, name='conv2_block2')
+    x = ResNetBlock(x, 64, conv_shortcut=False, name='conv2_block3')
+
+    x = ResNetBlock(x, 128, stride=2, name='conv3_block1')
+    x = ResNetBlock(x, 128, conv_shortcut=False, name='conv3_block2')
+    x = ResNetBlock(x, 128, conv_shortcut=False, name='conv3_block3')
+
+    # Add more blocks as needed
+
+    x = tf.keras.layers.GlobalAveragePooling2D(name='avg_pool')(x)
+    x = tf.keras.layers.Dense(
+        classes, activation='softmax', name='predictions')(x)
+
+    # Create model
+    model = tf.keras.Model(inputs, x, name='resnet50v2')
+    return model
