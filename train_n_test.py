@@ -56,7 +56,7 @@ def train():
 
     early_stopping_loss = EarlyStopping(
         monitor='val_loss',  # Monitor validation loss
-        min_delta= 0.0001,         # Adjust minimum change threshold
+        min_delta=0.0001,         # Adjust minimum change threshold
         patience=7,              # Increase patience
         verbose=1,
         mode='min'               # Monitor for loss improvement
@@ -64,7 +64,7 @@ def train():
 
     early_stopping_acc = EarlyStopping(
         monitor='val_accuracy',  # Monitor validation accuracy
-        min_delta= 0.0001,         # Adjust minimum change threshold
+        min_delta=0.0001,         # Adjust minimum change threshold
         patience=7,              # Increase patience
         verbose=1,
         mode='max'               # Monitor for accuracy improvement
