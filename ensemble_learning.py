@@ -6,7 +6,7 @@ from hyper_parameters import get_arguments
 args = get_arguments()
 
 
-def create_ensemble(num_models, input_shape=(64, 64, 3), num_classes=6, train_dataset=None):
+def create_ensemble(train_dataset, num_models, input_shape=(64, 64, 3), num_classes=6):
     models = []
     for _ in range(num_models):
         # Creating a bootstrap sample of the training dataset

@@ -126,7 +126,7 @@ if __name__ == "__main__":
 
 #     # Create an ensemble of models
 #     num_models = 3  # Adjust as needed
-#     ensemble_models = create_ensemble(num_models, input_shape=(64, 64, 3), num_classes=6, train_dataset=train_dataset)
+#     ensemble_models = create_ensemble(train_dataset, num_models, input_shape=(64, 64, 3), num_classes=6)
 
 #     # Train the ensemble models
 #     for model in ensemble_models:
