@@ -9,11 +9,12 @@ args = get_arguments()
 def create_ensemble(train_dataset, num_models, input_shape=(64, 64, 3), num_classes=6):
     models = []
     dataset_size = tf.data.experimental.cardinality(train_dataset).numpy()
+    seed = 42  # Optional: for reproducibility
+
     for _ in range(num_models):
-        # Creating a bootstrap sample of the training dataset
-        bootstrap_sample_indices = np.random.choice(
-            dataset_size, size=dataset_size, replace=True)
-        bootstrap_sample = train_dataset.take(bootstrap_sample_indices)
+        # Reshuffling the dataset
+        bootstrap_sample = train_dataset.shuffle(
+            dataset_size, seed=seed, reshuffle_each_iteration=True).take(dataset_size)
 
         # Create and compile the model
         model = ResNet50V2(input_shape=input_shape, classes=num_classes)
@@ -24,4 +25,5 @@ def create_ensemble(train_dataset, num_models, input_shape=(64, 64, 3), num_clas
         model.fit(bootstrap_sample, epochs=args.epochs, verbose=0)
 
         models.append(model)
+        seed += 1  # Update seed to change shuffle order for next model
     return models
