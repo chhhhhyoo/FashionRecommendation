@@ -8,10 +8,11 @@ args = get_arguments()
 
 def create_ensemble(train_dataset, num_models, input_shape=(64, 64, 3), num_classes=6):
     models = []
+    dataset_size = tf.data.experimental.cardinality(train_dataset).numpy()
     for _ in range(num_models):
         # Creating a bootstrap sample of the training dataset
         bootstrap_sample_indices = np.random.choice(
-            len(train_dataset), size=len(train_dataset), replace=True)
+            dataset_size, size=dataset_size, replace=True)
         bootstrap_sample = train_dataset.take(bootstrap_sample_indices)
 
         # Create and compile the model
