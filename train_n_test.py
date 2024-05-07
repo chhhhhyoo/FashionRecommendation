@@ -1,13 +1,13 @@
 import tensorflow as tf
 from fashion_input import prepare_df, load_data_numpy
-from simple_resnet import ResNet50V2
+from simple_resnet import ResNet50
 import numpy as np
 from hyper_parameters import get_arguments
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ReduceLROnPlateau, ModelCheckpoint
 import os
 import datetime
 # from transfer_learning import transfer_learning_model
-from ensemble_learning import create_ensemble
+# from ensemble_learning import create_ensemble
 from grad_cam import grad_cam
 import pickle
 
@@ -37,15 +37,14 @@ def train():
     train_dataset = get_dataset(train_df, args.batch_size)
     val_dataset = get_dataset(vali_df, args.batch_size)
 
-    # model = ResNet50V2(input_shape=(64, 64, 3), classes=6)
-    # model.compile(optimizer='adam',
-    #               loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    model = ResNet50(input_shape=(64, 64, 3), classes=6)
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-    num_models = 3  # Adjust as needed
-    ensemble_models = create_ensemble(num_models, input_shape=(
-        64, 64, 3), num_classes=6, train_dataset=train_dataset)
+    # num_models = 3  # Adjust as needed
+    # ensemble_models = create_ensemble(num_models, input_shape=(
+    #     64, 64, 3), num_classes=6, train_dataset=train_dataset)
 
-    # model.fit(train_dataset, epochs=args.epochs, validation_data=val_dataset)
     log_dir = os.path.join(
         "logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
@@ -89,25 +88,25 @@ def train():
         model_checkpoint
     ]
 
-    # model.fit(train_dataset, epochs=args.epochs,
-    #           validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
+    model.fit(train_dataset, epochs=args.epochs,
+              validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
 
-    for model in ensemble_models:
-        model.fit(train_dataset, epochs=args.epochs,
-                  validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
+    # for model in ensemble_models:
+    #     model.fit(train_dataset, epochs=args.epochs,
+    #               validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
 
-    # Evaluate the ensemble on the validation set
-    ensemble_accuracies = []
-    for model in ensemble_models:
-        _, accuracy = model.evaluate(val_dataset, verbose=0)
-        ensemble_accuracies.append(accuracy)
+    # # Evaluate the ensemble on the validation set
+    # ensemble_accuracies = []
+    # for model in ensemble_models:
+    #     _, accuracy = model.evaluate(val_dataset, verbose=0)
+    #     ensemble_accuracies.append(accuracy)
 
-    # Calculate the ensemble accuracy as the mean of individual model accuracies
-    ensemble_accuracy = sum(ensemble_accuracies) / len(ensemble_accuracies)
-    print("Ensemble Accuracy:", ensemble_accuracy)
+    # # Calculate the ensemble accuracy as the mean of individual model accuracies
+    # ensemble_accuracy = sum(ensemble_accuracies) / len(ensemble_accuracies)
+    # print("Ensemble Accuracy:", ensemble_accuracy)
 
-    with open('ensemble_models.pkl', 'wb') as f:
-        pickle.dump(ensemble_models, f)
+    # with open('ensemble_models.pkl', 'wb') as f:
+    #     pickle.dump(ensemble_models, f)
 
     # Save the model
     TRAIN_DIR = 'logs_' + args.version + '/'
