@@ -31,6 +31,8 @@ def ResNetBlock(x, filters, kernel_size=3, stride=1, conv_shortcut=True, name=No
     x = tf.keras.layers.Conv2D(4 * filters, 1, name=name + '_3_conv')(x)
     x = tf.keras.layers.BatchNormalization(
         axis=bn_axis, epsilon=1.001e-5, name=name + '_3_bn')(x)
+    
+    x = tf.keras.layers.Dropout(0.5)(x)  # Adding dropout layer
 
     x = tf.keras.layers.Add(name=name + '_add')([shortcut, x])
     x = tf.keras.layers.Activation('relu', name=name + '_out')(x)
