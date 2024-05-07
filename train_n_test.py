@@ -6,10 +6,10 @@ from hyper_parameters import get_arguments
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ReduceLROnPlateau, ModelCheckpoint
 import os
 import datetime
-from transfer_learning import transfer_learning_model
-from ensemble_learning import create_ensemble
-from grad_cam import grad_cam
-import pickle
+# from transfer_learning import transfer_learning_model
+# from ensemble_learning import create_ensemble
+# from grad_cam import grad_cam
+# import pickle
 
 
 args = get_arguments()
@@ -41,9 +41,9 @@ def train():
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-    num_models = 3  # Adjust as needed
-    ensemble_models = create_ensemble(num_models, input_shape=(
-        64, 64, 3), num_classes=6, train_dataset=train_dataset)
+    # num_models = 3  # Adjust as needed
+    # ensemble_models = create_ensemble(num_models, input_shape=(
+    #     64, 64, 3), num_classes=6, train_dataset=train_dataset)
 
     # model.fit(train_dataset, epochs=args.epochs, validation_data=val_dataset)
     log_dir = os.path.join(
@@ -56,16 +56,16 @@ def train():
 
     early_stopping_loss = EarlyStopping(
         monitor='val_loss',  # Monitor validation loss
-        min_delta=0.001,         # Adjust minimum change threshold
-        patience=7,              # Increase patience
+        min_delta= 0.0001,         # Adjust minimum change threshold
+        patience=10,              # Increase patience
         verbose=1,
         mode='min'               # Monitor for loss improvement
     )
 
     early_stopping_acc = EarlyStopping(
         monitor='val_accuracy',  # Monitor validation accuracy
-        min_delta=0.001,         # Adjust minimum change threshold
-        patience=7,              # Increase patience
+        min_delta= 0.0001,         # Adjust minimum change threshold
+        patience=10,              # Increase patience
         verbose=1,
         mode='max'               # Monitor for accuracy improvement
     )
