@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 import cv2
 import pandas as pd
+from grad_cam import grad_cam
 # import pickle
 
 # Function to preprocess the downloaded image(s)
@@ -22,10 +23,17 @@ def predict_category(model, image_path):
     preprocessed_image = preprocess_image(image_path)
     preprocessed_image = np.expand_dims(
         preprocessed_image, axis=0)  # Add batch dimension
+
+    # Predict category probabilities
     prediction = model.predict(preprocessed_image)
+
     # Get the category with highest probability
     predicted_category_code = np.argmax(prediction)
-    return predicted_category_code
+
+    # Get the class activation heatmap using Grad-CAM
+    grad_cam_heatmap = grad_cam(model, preprocessed_image)
+
+    return predicted_category_code, grad_cam_heatmap
 
 # Function to retrieve clothing recommendations based on predicted category
 
@@ -74,10 +82,19 @@ if __name__ == "__main__":
     # Assuming you have downloaded an image and want to get recommendations for it
     downloaded_image_path = './test_input.jpg'
     # Predict category of the downloaded image
-    predicted_category_code = predict_category(model, downloaded_image_path)
+    predicted_category_code, grad_cam_heatmap = predict_category(
+        model, downloaded_image_path)
 
     print("Predicted category code:", predicted_category_code)
     print("Category names:", category_names)
+
+    # Display the original image
+    print("Original Image:")
+    display_large_image('Original Image', downloaded_image_path)
+
+    # Display the Grad-CAM heatmap overlaid on the original image
+    print("Grad-CAM Heatmap:")
+    display_large_image('Grad-CAM Heatmap', grad_cam_heatmap)
 
     # Get recommendations based on the predicted category
     recommendations = get_recommendations(
