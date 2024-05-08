@@ -1,6 +1,6 @@
 import tensorflow as tf
 from fashion_input import prepare_df, load_data_numpy
-from simple_resnet import ResNet50
+from simple_resnet import ResNet50V2
 import numpy as np
 from hyper_parameters import get_arguments
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ReduceLROnPlateau, ModelCheckpoint
@@ -16,9 +16,6 @@ args = get_arguments()
 
 TRAIN_DIR = 'logs_' + args.version + '/'
 TRAIN_LOG_PATH = args.version + '_error.csv'
-
-# Assuming you have a function to generate your dataset
-
 
 def get_dataset(df, batch_size):
     """Assumes `load_data_numpy` returns suitable numpy arrays for x and y."""
@@ -37,21 +34,17 @@ def train():
     train_dataset = get_dataset(train_df, args.batch_size)
     val_dataset = get_dataset(vali_df, args.batch_size)
 
-    # model = ResNet50(input_shape=(64, 64, 3), classes=6)
-    # model.compile(optimizer='adam',
-    #               loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    model = ResNet50V2(input_shape=(64, 64, 3), classes=6)
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-    num_models = 3  # Adjust as needed
-    ensemble_models = create_ensemble(train_dataset, num_models, input_shape=(
-        64, 64, 3), num_classes=6)
+    # num_models = 3  # Adjust as needed
+    # ensemble_models = create_ensemble(train_dataset, num_models, input_shape=(
+    #     64, 64, 3), num_classes=6)
 
     log_dir = os.path.join(
         "logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
-
-    # # Early Stopping callback based on validation loss
-    # early_stopping_loss = EarlyStopping(
-    #     monitor='val_loss', min_delta=0.01, patience=3, verbose=1, mode='min')
 
     early_stopping_loss = EarlyStopping(
         monitor='val_loss',  # Monitor validation loss
@@ -69,10 +62,6 @@ def train():
         mode='max'               # Monitor for accuracy improvement
     )
 
-    # # Early Stopping callback based on validation accuracy
-    # early_stopping_acc = EarlyStopping(
-    #     monitor='val_accuracy', min_delta=0.01, patience=3, verbose=1, mode='max')
-
     reduce_lr = ReduceLROnPlateau(
         monitor='val_loss', factor=0.1, patience=5, min_lr=0.0001
     )
@@ -88,25 +77,25 @@ def train():
         model_checkpoint
     ]
 
-    # model.fit(train_dataset, epochs=args.epochs,
-            #   validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
+    model.fit(train_dataset, epochs=args.epochs,
+              validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
 
-    for model in ensemble_models:
-        model.fit(train_dataset, epochs=args.epochs,
-                  validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
+    # for model in ensemble_models:
+    #     model.fit(train_dataset, epochs=args.epochs,
+    #               validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
 
-    # Evaluate the ensemble on the validation set
-    ensemble_accuracies = []
-    for model in ensemble_models:
-        _, accuracy = model.evaluate(val_dataset, verbose=0)
-        ensemble_accuracies.append(accuracy)
+    # # Evaluate the ensemble on the validation set
+    # ensemble_accuracies = []
+    # for model in ensemble_models:
+    #     _, accuracy = model.evaluate(val_dataset, verbose=0)
+    #     ensemble_accuracies.append(accuracy)
 
-    # Calculate the ensemble accuracy as the mean of individual model accuracies
-    ensemble_accuracy = sum(ensemble_accuracies) / len(ensemble_accuracies)
-    print("Ensemble Accuracy:", ensemble_accuracy)
+    # # Calculate the ensemble accuracy as the mean of individual model accuracies
+    # ensemble_accuracy = sum(ensemble_accuracies) / len(ensemble_accuracies)
+    # print("Ensemble Accuracy:", ensemble_accuracy)
 
-    with open('ensemble_models.pkl', 'wb') as f:
-        pickle.dump(ensemble_models, f)
+    # with open('ensemble_models.pkl', 'wb') as f:
+    #     pickle.dump(ensemble_models, f)
 
     # Save the model
     TRAIN_DIR = 'logs_' + args.version + '/'

@@ -4,10 +4,7 @@ import pandas as pd
 # Load the dataset
 df = pd.read_csv('data/vali_modified.csv')
 
-# Assuming 'split' column exists and it indicates the data split (train, val, test)
 # Split the DataFrame based on the 'split' column
-
-
 def split_and_save(df, path='data'):
     # Split the DataFrame into groups
     groups = df.groupby('split')
@@ -19,5 +16,5 @@ def split_and_save(df, path='data'):
         print(f'Saved {split_name} split to {filename}')
 
 
-# Now calling the function will split the DataFrame and save the splits to separate files
+# Split the DataFrame and save the splits to separate files
 split_and_save(df)

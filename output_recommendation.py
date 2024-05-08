@@ -6,9 +6,6 @@ import pandas as pd
 from grad_cam import grad_cam
 # import pickle
 
-# Function to preprocess the downloaded image(s)
-
-
 def preprocess_image(image_path):
     image = Image.open(image_path)
     # Resize the image to match the input size of your model
@@ -60,7 +57,7 @@ def display_large_image(window_name, image_path):
     # Create a resizable window
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     img = cv2.imread(image_path)
-    # Resize the window to 800x800 pixels
+    # Resize the window to 400x400 pixels
     cv2.resizeWindow(window_name, 400, 400)
     cv2.imshow(window_name, img)
     cv2.waitKey(0)
@@ -70,7 +67,7 @@ def display_large_image(window_name, image_path):
 if __name__ == "__main__":
     # Load the trained model
     model = tf.keras.models.load_model(
-        'best_model.keras')  # Change the path if necessary
+        'best_model.keras')  # Path to best model
 
     # Load the CSV file
     df = pd.read_csv("data/vali_modified2.csv")
@@ -79,7 +76,6 @@ if __name__ == "__main__":
     category_names = {code: name for code, name in zip(
         df['category_old'], df['category_old'])}
 
-    # Assuming you have downloaded an image and want to get recommendations for it
     downloaded_image_path = './test_input.jpg'
     # Predict category of the downloaded image
     predicted_category_code, grad_cam_heatmap = predict_category(
@@ -88,13 +84,13 @@ if __name__ == "__main__":
     print("Predicted category code:", predicted_category_code)
     print("Category names:", category_names)
 
-    # Display the original image
-    print("Original Image:")
-    display_large_image('Original Image', downloaded_image_path)
+    # # Display the original image
+    # print("Original Image:")
+    # display_large_image('Original Image', downloaded_image_path)
 
-    # Display the Grad-CAM heatmap overlaid on the original image
-    print("Grad-CAM Heatmap:")
-    display_large_image('Grad-CAM Heatmap', grad_cam_heatmap)
+    # # Display the Grad-CAM heatmap overlaid on the original image
+    # print("Grad-CAM Heatmap:")
+    # display_large_image('Grad-CAM Heatmap', grad_cam_heatmap)
 
     # Get recommendations based on the predicted category
     recommendations = get_recommendations(

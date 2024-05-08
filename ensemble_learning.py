@@ -9,7 +9,7 @@ args = get_arguments()
 def create_ensemble(train_dataset, num_models, input_shape=(64, 64, 3), num_classes=6):
     models = []
     dataset_size = tf.data.experimental.cardinality(train_dataset).numpy()
-    seed = 42  # Optional: for reproducibility
+    seed = 42  
 
     for _ in range(num_models):
         # Reshuffling the dataset
