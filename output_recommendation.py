@@ -27,11 +27,11 @@ def predict_category(model, image_path):
     # Predict category probabilities
     prediction = model.predict(preprocessed_image)
 
-    # Get the category with highest probability
+    # Get the category with the highest probability
     predicted_category_code = np.argmax(prediction)
 
     # Get the class activation heatmap using Grad-CAM
-    grad_cam_heatmap = grad_cam(model, preprocessed_image)
+    grad_cam_heatmap = grad_cam(model, image_path)
 
     return predicted_category_code, grad_cam_heatmap
 
