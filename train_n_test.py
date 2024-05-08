@@ -35,7 +35,7 @@ def train():
     val_dataset = get_dataset(vali_df, args.batch_size)
 
     # model = ResNet50V2(input_shape=(64, 64, 3), classes=6)
-    model = transfer_learning_resnet50v2(input_shape=(64, 64, 3), num_classes=6)  # Use the transfer learning model
+    model = transfer_learning_resnet50v2(input_shape=(64, 64, 3), classes=6)  # Use the transfer learning model
 
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy', metrics=['accuracy'])
