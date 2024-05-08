@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 import cv2
 import pandas as pd
-import pickle
+# import pickle
 
 # Function to preprocess the downloaded image(s)
 
@@ -60,62 +60,62 @@ def display_large_image(window_name, image_path):
 
 
 if __name__ == "__main__":
-    # # Load the trained model
-    # model = tf.keras.models.load_model(
-    #     'best_model.keras')  # Change the path if necessary
+    # Load the trained model
+    model = tf.keras.models.load_model(
+        'best_model.keras')  # Change the path if necessary
 
-    # # Load the CSV file
-    # df = pd.read_csv("data/vali_modified2.csv")
+    # Load the CSV file
+    df = pd.read_csv("data/vali_modified2.csv")
 
-    # # Extract category names from the 'category_old' column
-    # category_names = {code: name for code, name in zip(
-    #     df['category_old'], df['category_old'])}
-
-    # # Assuming you have downloaded an image and want to get recommendations for it
-    # downloaded_image_path = './test_input.jpg'
-    # # Predict category of the downloaded image
-    # predicted_category_code = predict_category(model, downloaded_image_path)
-
-    # print("Predicted category code:", predicted_category_code)
-    # print("Category names:", category_names)
-
-    # # Get recommendations based on the predicted category
-    # recommendations = get_recommendations(
-    #     predicted_category_code, category_names, df)
-
-    # # Display the recommended clothing images
-    # print("Recommendations based on predicted category:")
-    # for recommendation in recommendations:
-    #     display_large_image('Recommended Clothing', recommendation)
-
-    with open('ensemble_models.pkl', 'rb') as f:
-        ensemble_models = pickle.load(f)
-
-    df = pd.read_csv('data/test_modified2.csv',
-                     usecols=['image_path', 'category_old'])
-
+    # Extract category names from the 'category_old' column
     category_names = {code: name for code, name in zip(
         df['category_old'], df['category_old'])}
 
-    downloaded_image_path = './test_output.jpg'
+    # Assuming you have downloaded an image and want to get recommendations for it
+    downloaded_image_path = './test_input.jpg'
+    # Predict category of the downloaded image
+    predicted_category_code = predict_category(model, downloaded_image_path)
 
-    preprocessed_image = preprocess_image(downloaded_image_path)
+    print("Predicted category code:", predicted_category_code)
+    print("Category names:", category_names)
 
-    ensemble_predictions = []
-    for model in ensemble_models:
-        prediction = model.predict(np.expand_dims(preprocessed_image, axis=0))
-        ensemble_predictions.append(prediction)
-
-    averaged_prediction = np.mean(ensemble_predictions, axis=0)
-
-    predicted_category_code = np.argmax(averaged_prediction)
-
+    # Get recommendations based on the predicted category
     recommendations = get_recommendations(
         predicted_category_code, category_names, df)
 
+    # Display the recommended clothing images
     print("Recommendations based on predicted category:")
     for recommendation in recommendations:
-        img = cv2.imread(recommendation)
-        cv2.imshow('Recommended Clothing', img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        display_large_image('Recommended Clothing', recommendation)
+
+    # with open('ensemble_models.pkl', 'rb') as f:
+    #     ensemble_models = pickle.load(f)
+
+    # df = pd.read_csv('data/test_modified2.csv',
+    #                  usecols=['image_path', 'category_old'])
+
+    # category_names = {code: name for code, name in zip(
+    #     df['category_old'], df['category_old'])}
+
+    # downloaded_image_path = './test_output.jpg'
+
+    # preprocessed_image = preprocess_image(downloaded_image_path)
+
+    # ensemble_predictions = []
+    # for model in ensemble_models:
+    #     prediction = model.predict(np.expand_dims(preprocessed_image, axis=0))
+    #     ensemble_predictions.append(prediction)
+
+    # averaged_prediction = np.mean(ensemble_predictions, axis=0)
+
+    # predicted_category_code = np.argmax(averaged_prediction)
+
+    # recommendations = get_recommendations(
+    #     predicted_category_code, category_names, df)
+
+    # print("Recommendations based on predicted category:")
+    # for recommendation in recommendations:
+    #     img = cv2.imread(recommendation)
+    #     cv2.imshow('Recommended Clothing', img)
+    #     cv2.waitKey(0)
+    #     cv2.destroyAllWindows()
