@@ -27,7 +27,7 @@ This project utilizes a deep learning approach to recommend clothing items based
 ### Training the Model
 
 To train the model, ensure you have the appropriate dataset structured according to the expectations in the data/ directory.
-You can downloaad the csv file from :
+You can download the csv file from :
 
 <https://github.com/wenxinxu/deep-shopping/blob/master/vali_modified.csv>
 
