@@ -45,6 +45,8 @@ python train_n_test.py --batch_size [number] --epochs [number]
 
 ### Make Recommendation
 
+First, you would save the image you would like this system to take and update its path in output_recommendation.py.
+
 To predict categories and receive recommendations, use the following command:
 
 ```bash

@@ -6,6 +6,7 @@ import pandas as pd
 from grad_cam import grad_cam
 # import pickle
 
+
 def preprocess_image(image_path):
     image = Image.open(image_path)
     # Resize the image to match the input size of your model
@@ -13,7 +14,7 @@ def preprocess_image(image_path):
     image = np.array(image) / 255.0  # Normalize pixel values
     return image
 
-# Function to predict category using the trained model
+# Predict category using the trained model
 
 
 def predict_category(model, image_path):
@@ -32,7 +33,7 @@ def predict_category(model, image_path):
 
     return predicted_category_code, grad_cam_heatmap
 
-# Function to retrieve clothing recommendations based on predicted category
+# Retrieve clothing recommendations based on predicted category
 
 
 def get_recommendations(predicted_category_code, category_names, df):
