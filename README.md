@@ -31,7 +31,7 @@ You can downloaad the csv file from :
 
 <https://github.com/wenxinxu/deep-shopping/blob/master/vali_modified.csv>
 
-You could either use the first block of split_dataset.ipynb or split_dataset.py to split the dataset as intended.
+You could either use the first block of **split_dataset.ipynb** or **split_dataset.py** to split the dataset as intended.
 
 You will also need to download the img file where you can find it from :
 
@@ -45,10 +45,26 @@ python train_n_test.py --batch_size [number] --epochs [number]
 
 ### Make Recommendation
 
-First, you would save the image you would like this system to take and update its path in output_recommendation.py.
+First, you would save the image you would like this system to take and update its path in **output_recommendation.py**.
 
 To predict categories and receive recommendations, use the following command:
 
 ```bash
 python output_recommendation.py
 ```
+
+## Model Components
+
+- **ensemble_learning.py**: Manages the creation and training of ensemble models. This script is responsible for bootstrapping the training dataset to train multiple instances of a model, each on slightly different data. This improves the robustness and accuracy of predictions by combining the strengths of multiple models.
+
+- **fashion_input.py**: Handles image loading, preprocessing, and dataset preparation. It processes images by resizing and normalizing them to ensure they are in a suitable format for model input. It also includes functionality to handle localization by cropping images based on specified bounding box coordinates.
+
+- **grad_cam.py**: Provides functionality to generate Grad-CAM visualizations for understanding model decisions. This is useful for debugging and improving model interpretability, allowing users to see which parts of an image are most influential in model predictions.
+
+- **hyper_parameters.py**: Manages command-line arguments for hyperparameter tuning. This script uses argparse to handle various command-line options to configure model training, such as learning rate, number of epochs, and paths to training data.
+
+- **output_recommendation.py**: Integrates all components to predict categories and generate fashion recommendations. It utilizes the trained model to classify input images and then suggests fashion items based on these predictions. Additionally, it uses Grad-CAM to provide visual feedback on what the model is focusing on in the images.
+
+- **train_n_test.py**: Manages the overall training and testing processes. It orchestrates the training sessions, handles model evaluation, and applies transfer learning techniques to improve model performance. It also manages various callbacks to enhance training efficiency, such as early stopping and learning rate reductions.
+
+- **transfer_learning.py**: Implements transfer learning techniques using pretrained models. This script enhances the capability of the fashion recommendation system by leveraging knowledge from large, previously trained models to improve prediction accuracy and reduce training time.
