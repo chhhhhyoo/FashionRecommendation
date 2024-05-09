@@ -41,6 +41,7 @@ Then you are ready to initiate training by running:
 
 ```bash
 python train_n_test.py --batch_size [number] --epochs [number]
+```
 
 ### Make Recommendation
 
@@ -48,3 +49,4 @@ To predict categories and receive recommendations, use the following command:
 
 ```bash
 python output_recommendation.py
+```
