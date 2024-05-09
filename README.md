@@ -28,10 +28,15 @@ This project utilizes a deep learning approach to recommend clothing items based
 
 To train the model, ensure you have the appropriate dataset structured according to the expectations in the data/ directory.
 You can downloaad the csv file from :
+
 <https://github.com/wenxinxu/deep-shopping/blob/master/vali_modified.csv>
+
 You could either use the first block of split_dataset.ipynb or split_dataset.py to split the dataset as intended.
+
 You will also need to download the img file where you can find it from :
+
 <https://drive.google.com/drive/folders/0B7EVK8r0v71pekpRNUlMS3Z5cUk?resourcekey=0-GHiFnJuDTvzzGuTj6lE6og>
+
 Then you are ready to initiate training by running:
 
 ```bash
