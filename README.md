@@ -37,6 +37,8 @@ You will also need to download the img file where you can find it from :
 
 <https://drive.google.com/drive/folders/0B7EVK8r0v71pekpRNUlMS3Z5cUk?resourcekey=0-GHiFnJuDTvzzGuTj6lE6og>
 
+Each code for simple resnet implementation / emsemble learning / transfer learning can be commented or not in order to apply it in training.
+
 Then you are ready to initiate training by running:
 
 ```bash
