@@ -1,6 +1,7 @@
 import tensorflow as tf
 from fashion_input import prepare_df, load_data_numpy
 from simple_resnet import ResNet50V2
+from inception_integration import ResNetWithInception
 import numpy as np
 from hyper_parameters import get_arguments
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ReduceLROnPlateau, ModelCheckpoint
@@ -17,8 +18,9 @@ args = get_arguments()
 TRAIN_DIR = 'logs_' + args.version + '/'
 TRAIN_LOG_PATH = args.version + '_error.csv'
 
+
 def get_dataset(df, batch_size):
-    """Assumes `load_data_numpy` returns suitable numpy arrays for x and y."""
+    """Assumption : `load_data_numpy` returns suitable numpy arrays for x and y."""
     images, labels, _ = load_data_numpy(df)
     dataset = tf.data.Dataset.from_tensor_slices((images, labels))
     dataset = dataset.shuffle(buffer_size=1024).batch(batch_size)
@@ -35,7 +37,9 @@ def train():
     val_dataset = get_dataset(vali_df, args.batch_size)
 
     # model = ResNet50V2(input_shape=(64, 64, 3), classes=6)
-    model = transfer_learning_resnet50v2(input_shape=(64, 64, 3), classes=6)  # Use the transfer learning model
+    # model = transfer_learning_resnet50v2(input_shape=(64, 64, 3), classes=6)  # Use the transfer learning model
+    # Use inception + resnet model
+    model = ResNetWithInception(input_shape=(64, 64, 3), classes=6)
 
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy', metrics=['accuracy'])
