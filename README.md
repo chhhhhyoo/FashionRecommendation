@@ -2,15 +2,17 @@
 
 ## Overview
 
-This project utilizes a deep learning approach to recommend clothing items based on user preferences. By processing images through a modified ResNet model, the system predicts categories and provides relevant fashion recommendations. This solution will bridge the gap between fashion preferences and available inventory, enhancing user experience in digital fashion platforms.
+This project leverages deep learning techniques to recommend clothing items based on user preferences. By processing images through a modified ResNet model, the system predicts categories and provides relevant fashion recommendations. The goal is to enhance the shopping experience by bridging the gap between fashion preferences and available inventory, improving user engagement in digital fashion platforms.
 
 ## Features
 
 - **Image Preprocessing**: Standardizes input images to ensure consistency in model inputs.
-- **Fashion Categorization**: Utilizes a fine-tuned ResNet50V2 model to classify clothing items into predefined categories.
-- **Recommendation Generation**: Offers fashion recommendations based on the predicted category from user inputs.
-- **Localization Support**: Includes functionality(bounding box) to handle image localization tasks, enhancing the model's focus on specific image regions.
+- **Fashion Categorization**: Fine-tuned ResNet50V2 model classifies clothing items into predefined categories.
+- **Recommendation Generation**: Provides fashion recommendations based on the predicted category from user inputs.
+- **Localization Support**: Utilizes bounding boxes to enhance the model's focus on specific image regions.
 - **Ensemble Learning**: Implements an ensemble of ResNet models to improve prediction robustness.
+- **Content-Based Recommendation**: Uses cosine similarity on feature embeddings to find similar images.
+- **Grad-CAM Visualization**: Explains model predictions using activation heatmaps.
 
 ## Installation
 
@@ -22,10 +24,26 @@ This project utilizes a deep learning approach to recommend clothing items based
 - Pandas
 - NumPy
 
+### Setup
+
+Clone the repository:
+
+```bash
+git clone https://github.com/chhhhhyoo/FashionRecommendation.git
+cd FashionRecommendation
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Usage
 
 ### Training the Model
 
+[Prepare the Dataset]
 To train the model, ensure you have the appropriate dataset structured according to the expectations in the data/ directory.
 You can download the csv file from :
 
@@ -39,6 +57,7 @@ You will also need to download the img file where you can find it from :
 
 Each code for simple resnet implementation / emsemble learning / transfer learning can be commented or not in order to apply it in training.
 
+[Train the Model]
 Then you are ready to initiate training by running:
 
 ```bash
@@ -47,7 +66,7 @@ python train_n_test.py --batch_size [number] --epochs [number]
 
 ### Make Recommendation
 
-First, you would save the image you would like this system to take and update its path in **output_recommendation.py**.
+Save the query image in the working directory and update its path in **output_recommendation.py**.
 
 To predict categories and receive recommendations, use the following command:
 
