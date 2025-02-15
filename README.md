@@ -76,16 +76,23 @@ python output_recommendation.py
 
 ## Model Components
 
-- **ensemble_learning.py**: Manages the creation and training of ensemble models. This script is responsible for bootstrapping the training dataset to train multiple instances of a model, each on slightly different data. This improves the robustness and accuracy of predictions by combining the strengths of multiple models.
+- **`fashion_input.py`**: Handles image preprocessing, including resizing, normalization, and bounding box localization.
+- **`preprocessing.py`**: Processes raw datasets for model training and evaluation, including feature extraction, normalization, and train-test split.
+- **`simple_resnet.py`**: Defines the ResNet50V2 architecture, which is used as the base model for feature extraction and classification.
+- **`inception_integration.py`**: Implements an Inception module integrated with ResNet to enhance feature representation and improve classification performance.
+- **`train_n_test.py`**: Handles model training and validation. It loads datasets, applies augmentations, and configures training callbacks such as early stopping and learning rate adjustments.
+- **`ensemble_learning.py`**: Implements an ensemble learning strategy by training multiple models on bootstrapped datasets, improving robustness and reducing overfitting.
+- **`transfer_learning.py`**: Leverages pre-trained ResNet models and fine-tunes them on the dataset, reducing training time and improving accuracy.
+- **`hyper_parameters.py`**: Manages command-line arguments for tuning hyperparameters such as learning rate, batch size, and the number of training epochs.
+- **`grad_cam.py`**: Generates Grad-CAM visualizations to interpret model decisions by highlighting important image regions that influence classification.
+- **`output_recommendation.py`**: Loads a trained model, takes an input image, predicts the clothing category, and retrieves the most relevant fashion recommendations based on the model's output.
 
-- **fashion_input.py**: Handles image loading, preprocessing, and dataset preparation. It processes images by resizing and normalizing them to ensure they are in a suitable format for model input. It also includes functionality to handle localization by cropping images based on specified bounding box coordinates.
+## Future Improvements
 
-- **grad_cam.py**: Provides functionality to generate Grad-CAM visualizations for understanding model decisions. This is useful for debugging and improving model interpretability, allowing users to see which parts of an image are most influential in model predictions.
+- **Real-time Data Integration**: Connect to fashion e-commerce APIs for dynamic recommendations.
 
-- **hyper_parameters.py**: Manages command-line arguments for hyperparameter tuning. This script uses argparse to handle various command-line options to configure model training, such as learning rate, number of epochs, and paths to training data.
+- **Scalability Enhancements**: Optimize model for large-scale datasets.
 
-- **output_recommendation.py**: Integrates all components to predict categories and generate fashion recommendations. It utilizes the trained model to classify input images and then suggests fashion items based on these predictions. Additionally, it uses Grad-CAM to provide visual feedback on what the model is focusing on in the images.
+- **Cloud Deployment**: Deploy via FastAPI with a front-end web interface.
 
-- **train_n_test.py**: Manages the overall training and testing processes. It orchestrates the training sessions, handles model evaluation, and applies transfer learning techniques to improve model performance. It also manages various callbacks to enhance training efficiency, such as early stopping and learning rate reductions.
-
-- **transfer_learning.py**: Implements transfer learning techniques using pretrained models. This script enhances the capability of the fashion recommendation system by leveraging knowledge from large, previously trained models to improve prediction accuracy and reduce training time.
+- **Personalization**: Improve recommendations using user browsing history and feedback mechanisms.
