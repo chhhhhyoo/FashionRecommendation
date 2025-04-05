@@ -24,6 +24,10 @@ logs/
 *.keras
 *.h5
 
+# Ignore Python bytecode and __pycache__ folders
+__pycache__/
+*.py[cod]
+
 # TensorBoard logs
 */events.out.tfevents.*
 
@@ -32,6 +36,9 @@ data/
 image_embeddings.pkl
 *.tfrecord
 *.npz
+img/
+*.jpg
+
 
 # Output files
 output/
