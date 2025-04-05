@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import os
 import cv2
 import pandas as pd
 from grad_cam import grad_cam
@@ -57,6 +58,7 @@ def get_recommendations(predicted_category_code, category_names, df):
 def display_large_image(window_name, image_path):
     # Create a resizable window
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+    path = os.path.join("..", "img", image_path)
     img = cv2.imread(image_path)
     # Resize the window to 400x400 pixels
     cv2.resizeWindow(window_name, 400, 400)

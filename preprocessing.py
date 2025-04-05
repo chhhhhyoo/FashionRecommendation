@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import cv2
+import os
 
 path = 'data/vali_modified.csv'
 df = pd.read_csv(path)
@@ -13,7 +14,7 @@ x2 = df['x2'].to_numpy().astype(np.float32)
 y2 = df['y2'].to_numpy().astype(np.float32)
 
 for i in range(len(image_path_array)):
-    path = image_path_array[i]
+    path = os.path.join("..", "img", image_path_array[i])
     img = cv2.imread(path)
     if img is None:
         continue

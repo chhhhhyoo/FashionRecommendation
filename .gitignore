@@ -1,0 +1,47 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# PyCharm / VS Code settings
+.idea/
+.vscode/
+
+# Logs and model checkpoints
+logs/
+*.log
+*.csv
+*.ckpt
+*.keras
+*.h5
+
+# TensorBoard logs
+*/events.out.tfevents.*
+
+# Dataset and image artifacts
+data/
+image_embeddings.pkl
+*.tfrecord
+*.npz
+
+# Output files
+output/
+*.out
+*.tmp
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# pip environment metadata
+pip-selfcheck.json

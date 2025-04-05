@@ -1,7 +1,7 @@
 '''
 This python file is responsible for the image processing
 '''
-
+import os
 import cv2
 import numpy as np
 import pandas as pd
@@ -27,6 +27,7 @@ def get_image(path, x1, y1, x2, y2):
     :param y2:
     :return: a numpy array with dimensions [img_row, img_col, img_depth]
     '''
+    path = os.path.join("..", "img", path)
     img = cv2.imread(path)
     if img is None or img.size == 0:  # More robust check here
         img = np.zeros((IMG_ROWS, IMG_COLS, 3), dtype=np.uint8)
@@ -73,6 +74,7 @@ def prepare_df(path, usecols, shuffle=shuffle):
     :param usecols: which columns to read
     :return: a pandas dataframe
     '''
+
     df = pd.read_csv(path, usecols=usecols)
     if shuffle:
         df = df.sample(frac=1).reset_index(drop=True)
