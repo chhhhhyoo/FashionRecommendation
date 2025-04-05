@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import os
 
-path = 'data/vali_modified.csv'
+path = 'data/raw/vali_modified.csv'
 df = pd.read_csv(path)
 
 image_path_array = df['image_path'].to_numpy()
@@ -30,5 +30,5 @@ df['y1_modified'] = pd.DataFrame(y1)
 df['x2_modified'] = pd.DataFrame(x2)
 df['y2_modified'] = pd.DataFrame(y2)
 
-df.to_csv('data/vali_modified2.csv', index=False)
+df.to_csv('data/processed/vali_modified2.csv', index=False)
 print(df.head())

@@ -73,7 +73,7 @@ if __name__ == "__main__":
         'best_model.keras')  # Path to best model
 
     # Load the CSV file
-    df = pd.read_csv("data/vali_modified2.csv")
+    df = pd.read_csv("data/processed/vali_modified2.csv")
 
     # Extract category names from the 'category_old' column
     category_names = {code: name for code, name in zip(

@@ -32,7 +32,6 @@ __pycache__/
 */events.out.tfevents.*
 
 # Dataset and image artifacts
-data/
 image_embeddings.pkl
 *.tfrecord
 *.npz

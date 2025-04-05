@@ -1,15 +1,15 @@
 import tensorflow as tf
-from fashion_input import prepare_df, load_data_numpy
-from simple_resnet import ResNet50V2
-from inception_integration import ResNetWithInception
+from src.data_processing.fashion_input import prepare_df, load_data_numpy
+from src.models.simple_resnet import ResNet50V2
+from src.models.inception_integration import ResNetWithInception
 import numpy as np
 from hyper_parameters import get_arguments
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ReduceLROnPlateau, ModelCheckpoint
 import os
 import datetime
-from transfer_learning import transfer_learning_resnet50v2
-from ensemble_learning import create_ensemble
-from grad_cam import grad_cam
+from src.models.transfer_learning import transfer_learning_resnet50v2
+from src.models.ensemble_learning import create_ensemble
+from src.recommendation.grad_cam import grad_cam
 import pickle
 
 

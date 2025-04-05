@@ -9,11 +9,11 @@ def get_arguments():
     # Add arguments
     parser.add_argument('--version', type=str, default='exp1',
                         help='Version number of this experiment')
-    parser.add_argument('--train_path', type=str, default='data/train_modified2.csv',
+    parser.add_argument('--train_path', type=str, default='data/processed/train_modified2.csv',
                         help='Path to the train image list csv')
-    parser.add_argument('--vali_path', type=str, default='data/vali_modified2.csv',
+    parser.add_argument('--vali_path', type=str, default='data/processed/vali_modified2.csv',
                         help='Path to the validation image list csv')
-    parser.add_argument('--test_path', type=str, default='data/vali_modified2.csv',
+    parser.add_argument('--test_path', type=str, default='data/processed/test_modified2.csv',
                         help='Path to the test image list csv')
     parser.add_argument('--fc_path', type=str, default='data/downloaded_test_fc.csv',
                         help='Path to save the feature layer values of the test data')

@@ -1,11 +1,8 @@
-'''
-This python file is responsible for the image processing
-'''
 import os
 import cv2
 import numpy as np
 import pandas as pd
-from hyper_parameters import get_arguments
+from src.training.hyper_parameters import get_arguments
 
 args = get_arguments()
 

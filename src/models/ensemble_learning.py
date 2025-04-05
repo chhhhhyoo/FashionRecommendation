@@ -1,7 +1,7 @@
 import tensorflow as tf
 from simple_resnet import ResNet50V2
 import numpy as np
-from hyper_parameters import get_arguments
+from src.training.hyper_parameters import get_arguments
 
 args = get_arguments()
 

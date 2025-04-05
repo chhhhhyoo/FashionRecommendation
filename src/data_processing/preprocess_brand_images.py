@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     # Preprocess the brand images directory
     # Specify your directory with brand images
-    image_directory = "path_to_your_brand_images"
+    image_directory = "path_to_brand_images"
     image_embeddings = preprocess_image_pool(model, image_directory)
 
     # Save the image embeddings to a file
