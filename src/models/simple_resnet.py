@@ -84,8 +84,6 @@ def ResNet50V2(input_shape=(64, 64, 3), classes=6):
     x = ResNetBlock(x, 128, conv_shortcut=False, name='conv3_block2')
     x = ResNetBlock(x, 128, conv_shortcut=False, name='conv3_block3')
 
-    # Add more blocks as needed
-
     x = tf.keras.layers.GlobalAveragePooling2D(name='avg_pool')(x)
     x = tf.keras.layers.Dense(
         classes, activation='softmax', name='predictions')(x)

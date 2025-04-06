@@ -35,20 +35,29 @@ def inception_module(x, filters_1x1, filters_3x3_reduce, filters_3x3, filters_5x
 def ResNetWithInception(input_shape=(64, 64, 3), classes=6):
     inputs = tf.keras.Input(shape=input_shape)
 
-    # Initial convolution and pooling layers
+    # Initial Conv + MaxPool (from original ResNet)
     x = tf.keras.layers.Conv2D(64, (7, 7), strides=(
         2, 2), padding='same', activation='relu')(inputs)
     x = tf.keras.layers.MaxPooling2D((3, 3), strides=(2, 2), padding='same')(x)
 
-    # Add an Inception module after the initial ResNet block
-    x = inception_module(x, filters_1x1=64, filters_3x3_reduce=96, filters_3x3=128,
-                         filters_5x5_reduce=16, filters_5x5=32, filters_pool_proj=32)
+    # GoogLeNet-style Inception module
+    x = inception_module(
+        x,
+        filters_1x1=64,
+        filters_3x3_reduce=96, filters_3x3=128,
+        filters_5x5_reduce=16, filters_5x5=32,
+        filters_pool_proj=32
+    )
 
-    # Continue with the rest of the ResNet blocks
-    x = ResNetBlock(x, 128, stride=2, name='conv3_block1')
-    x = ResNetBlock(x, 128, conv_shortcut=False, name='conv3_block2')
+    # Residual Blocks with Dropout Regularization (WideResNet-style)
+    x = ResNetBlock(x, 128, stride=2, name='conv3_block1', dropout_rate=0.3)
+    x = ResNetBlock(x, 128, conv_shortcut=False, name='conv3_block2', dropout_rate=0.3)
 
+    # Global average pooling + Fully-connected layers
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
+    x = tf.keras.layers.Dropout(0.5)(x)
+    x = tf.keras.layers.Dense(256, activation='relu')(x)
+    x = tf.keras.layers.Dropout(0.3)(x)
     x = tf.keras.layers.Dense(classes, activation='softmax')(x)
 
     model = tf.keras.Model(inputs, x)

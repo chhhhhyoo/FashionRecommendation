@@ -14,7 +14,6 @@ import pickle
 
 
 args = get_arguments()
-tf.debugging.set_log_device_placement(True)
 TRAIN_DIR = 'logs_' + args.version + '/'
 TRAIN_LOG_PATH = args.version + '_error.csv'
 
@@ -52,20 +51,21 @@ def train():
         "logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
-    early_stopping_loss = EarlyStopping(
-        monitor='val_loss',  # Monitor validation loss
-        min_delta=0.0001,         # Adjust minimum change threshold
-        patience=10,              # Increase patience
-        verbose=1,
-        mode='min'               # Monitor for loss improvement
-    )
+    # early_stopping_loss = EarlyStopping(
+    #     monitor='val_loss',  # Monitor validation loss
+    #     min_delta=0.0001,         
+    #     patience=10,          
+    #     verbose=1,
+    #     mode='min'             
+    # )
 
     early_stopping_acc = EarlyStopping(
         monitor='val_accuracy',  # Monitor validation accuracy
-        min_delta=0.0001,         # Adjust minimum change threshold
-        patience=10,              # Increase patience
+        min_delta=0.0001,         # minimum change threshold
+        patience=10,             
         verbose=1,
-        mode='max'               # Monitor for accuracy improvement
+        mode='max',               # Monitor for accuracy improvement
+        restore_best_weights=True
     )
 
     reduce_lr = ReduceLROnPlateau(
@@ -77,7 +77,6 @@ def train():
 
     callbacks_list = [
         tensorboard_callback,
-        early_stopping_loss,
         early_stopping_acc,
         reduce_lr,
         model_checkpoint
@@ -90,24 +89,6 @@ def train():
     print(f"\n Final Validation Loss: {final_loss:.4f}")
     print(f" Final Validation Accuracy: {final_accuracy:.4f}")
 
-
-    # for model in ensemble_models:
-    #     model.fit(train_dataset, epochs=args.epochs,
-    #               validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
-
-    # # Evaluate the ensemble on the validation set
-    # ensemble_accuracies = []
-    # for model in ensemble_models:
-    #     _, accuracy = model.evaluate(val_dataset, verbose=0)
-    #     ensemble_accuracies.append(accuracy)
-
-    # # Calculate the ensemble accuracy as the mean of individual model accuracies
-    # ensemble_accuracy = sum(ensemble_accuracies) / len(ensemble_accuracies)
-    # print("Ensemble Accuracy:", ensemble_accuracy)
-
-    # with open('ensemble_models.pkl', 'wb') as f:
-    #     pickle.dump(ensemble_models, f)
-
     # Save the model
     TRAIN_DIR = 'logs_' + args.version + '/'
     if not os.path.exists(TRAIN_DIR):
@@ -117,27 +98,3 @@ def train():
 
 if __name__ == "__main__":
     train()
-
-# if __name__ == "__main__":
-#     # Load and preprocess the dataset
-#     train_dataset = get_dataset(train_df, args.batch_size)
-#     val_dataset = get_dataset(vali_df, args.batch_size)
-
-#     # Create an ensemble of models
-#     num_models = 3  # Adjust as needed
-#     ensemble_models = create_ensemble(train_dataset, num_models, input_shape=(64, 64, 3), num_classes=6)
-
-#     # Train the ensemble models
-#     for model in ensemble_models:
-#         model.fit(train_dataset, epochs=args.epochs,
-#                   validation_data=val_dataset, verbose=1, callbacks=callbacks_list)
-
-#     # Evaluate the ensemble on the validation set
-#     ensemble_accuracies = []
-#     for model in ensemble_models:
-#         _, accuracy = model.evaluate(val_dataset, verbose=0)
-#         ensemble_accuracies.append(accuracy)
-
-#     # Calculate the ensemble accuracy as the mean of individual model accuracies
-#     ensemble_accuracy = sum(ensemble_accuracies) / len(ensemble_accuracies)
-#     print("Ensemble Accuracy:", ensemble_accuracy)
