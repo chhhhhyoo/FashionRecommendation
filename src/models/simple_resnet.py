@@ -4,7 +4,7 @@ from src.training.hyper_parameters import get_arguments
 args = get_arguments()
 
 
-def ResNetBlock(x, filters, kernel_size=3, stride=1, conv_shortcut=True, name=None):
+def ResNetBlock(x, filters, kernel_size=3, stride=1, conv_shortcut=True, name=None, dropout_rate=None):
     """A standard ResNet block."""
     bn_axis = 3 if tf.keras.backend.image_data_format() == 'channels_last' else 1
 
@@ -32,7 +32,8 @@ def ResNetBlock(x, filters, kernel_size=3, stride=1, conv_shortcut=True, name=No
     x = tf.keras.layers.BatchNormalization(
         axis=bn_axis, epsilon=1.001e-5, name=name + '_3_bn')(x)
     
-    x = tf.keras.layers.Dropout(0.5)(x)  # Adding dropout layer
+    if dropout_rate is not None:
+        x = tf.keras.layers.Dropout(dropout_rate, name=name + '_dropout')(x)
 
     x = tf.keras.layers.Add(name=name + '_add')([shortcut, x])
     x = tf.keras.layers.Activation('relu', name=name + '_out')(x)
