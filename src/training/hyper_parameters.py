@@ -33,7 +33,7 @@ def get_arguments():
                         default=2, help='Number of residual blocks in ResNet')
     parser.add_argument('--is_localization', action='store_true',
                         help='Add localization task or not')
-    parser.add_argument('--batch_size', type=int, default=128,
+    parser.add_argument('--batch_size', type=int, default=64,
                         help='Batch size for training and validation')
     parser.add_argument('--epochs', type=int, default=100,
                         help='Number of epochs to train for')
